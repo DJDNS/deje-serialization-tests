@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+COMMAND="$@"
+
+get_dirs() {
+    find $1 -mindepth 1 -maxdepth 1 -type d -printf "%f\n"
+}
+produce() {
+    $COMMAND $1 $2
+}
+
+test_root=$(dirname $0)
+
+for test_suite in $(get_dirs $test_root); do
+    for object_type in $(get_dirs $test_root/$test_suite); do
+        dir_e=$test_root/$test_suite/$object_type/expected
+        dir_p=$test_root/$test_suite/$object_type/produced
+        mkdir -p $dir_p
+        for format in $dir_e/*; do
+            format=$(basename $format)
+            echo "$test_suite :: $object_type+$format..."
+            produce $object_type $format \
+                < $test_root/$test_suite/$object_type/input.json \
+                > $dir_p/$format
+
+            diff {$dir_e,$dir_p}/$format
+            echo "    PASS"
+        done
+    done
+done
