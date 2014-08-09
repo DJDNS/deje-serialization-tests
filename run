@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-COMMAND="$@"
+COMMAND="$1"
 test_root=$(dirname $0)
 
 get_dirs() {
@@ -25,6 +25,10 @@ run_test() {
     diff {$dir_e,$dir_p}/$format
     echo "    PASS"
 }
+if [[ -n $2 && -n $3 && -n $4 ]]; then
+    run_test $2 $3 $4
+    exit 0
+fi
 
 for test_suite in $(get_dirs $test_root); do
     for object_type in $(get_dirs $test_root/$test_suite); do
