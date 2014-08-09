@@ -16,6 +16,7 @@ run_test() {
 
     dir_e=$test_root/$test_suite/$object_type/expected
     dir_p=$test_root/$test_suite/$object_type/produced
+    mkdir -p $dir_p
 
     echo "$test_suite :: $object_type+$format..."
     produce $object_type $format \
@@ -33,8 +34,6 @@ fi
 for test_suite in $(get_dirs $test_root); do
     for object_type in $(get_dirs $test_root/$test_suite); do
         dir_e=$test_root/$test_suite/$object_type/expected
-        dir_p=$test_root/$test_suite/$object_type/produced
-        mkdir -p $dir_p
         for format in $dir_e/*; do
             run_test $test_suite $object_type $format
         done
