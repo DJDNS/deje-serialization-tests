@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 COMMAND="$@"
+test_root=$(dirname $0)
 
 get_dirs() {
     find $1 -mindepth 1 -maxdepth 1 -type d -printf "%f\n"
@@ -8,8 +9,22 @@ get_dirs() {
 produce() {
     $COMMAND $1 $2
 }
+run_test() {
+    test_suite=$1
+    object_type=$2
+    format=$(basename $3)
 
-test_root=$(dirname $0)
+    dir_e=$test_root/$test_suite/$object_type/expected
+    dir_p=$test_root/$test_suite/$object_type/produced
+
+    echo "$test_suite :: $object_type+$format..."
+    produce $object_type $format \
+        < $test_root/$test_suite/$object_type/input.json \
+        > $dir_p/$format
+
+    diff {$dir_e,$dir_p}/$format
+    echo "    PASS"
+}
 
 for test_suite in $(get_dirs $test_root); do
     for object_type in $(get_dirs $test_root/$test_suite); do
@@ -17,14 +32,7 @@ for test_suite in $(get_dirs $test_root); do
         dir_p=$test_root/$test_suite/$object_type/produced
         mkdir -p $dir_p
         for format in $dir_e/*; do
-            format=$(basename $format)
-            echo "$test_suite :: $object_type+$format..."
-            produce $object_type $format \
-                < $test_root/$test_suite/$object_type/input.json \
-                > $dir_p/$format
-
-            diff {$dir_e,$dir_p}/$format
-            echo "    PASS"
+            run_test $test_suite $object_type $format
         done
     done
 done
