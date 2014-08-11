@@ -1,1 +1,1 @@
-{"parent":"","handler":"SET","args":{"a":"b","c":"d"}}
+{"parent":"","handler":"SET","args":{"path":[],"value":{"a":"b","c":"d"}}}
