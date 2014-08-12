@@ -65,3 +65,28 @@ Your hook is fed JSON data via STDIN. This will always be valid JSON, we are not
 Finally, a file is populated from the hook's STDOUT.
 
 **THIS SHOULD NEVER OUTPUT A NEWLINE AT THE END OF THE FILE.** It's cleaner this way, since the compact content should not include a newline when hashed, and we might as well be consistent.
+
+### Repository structure
+
+This repository is arranged in a folder tree according to the following hierarchy.
+
+ * run
+ * README.md
+ * some\_test\_dir
+   * description
+   * model
+     * input.json
+     * expected
+       * pretty4
+     * produced
+       * pretty4
+   * document
+     * input.json
+     * expected
+     * produced
+ * some\_other\_test\_dir
+ * ...
+
+Pretty straightforward. Each test has a description, and one or more object types. Each object type has an input.json file for input data, and an 'expected' dir for output in various formats. The 'produced' dir starts out empty (or nonexistent, due to the way git handles empty dirs), but is automatically created and populated when those tests are run.
+
+It should be easy to use existing tests as reference when creating new ones.
