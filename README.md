@@ -39,7 +39,6 @@ document:
 {
     "topic": "...",
     "events": {...},
-    "quorums": {...},
     "timestamps": [...]
 }
 ```
