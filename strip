@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Strips out newlines
+
+stripper() {
+    perl -e 'undef $/; $_ = <>; s/\R\z//; print'
+}
+
+for f in "$@"; do
+    stripper < $f > ./temp
+    mv ./temp $f
+done
