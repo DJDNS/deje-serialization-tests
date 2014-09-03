@@ -37,7 +37,6 @@ event:
 
 document:
 {
-    "topic": "...",
     "events": {...},
     "timestamps": [...]
 }
